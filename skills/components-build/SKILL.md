@@ -1,157 +1,158 @@
 ---
 name: components-build
-description: Open-source specification for building modern, composable, and accessible UI components. Use when creating React components, designing component APIs, building component libraries, implementing accessibility, setting up styling systems with design tokens, or publishing components via registries or npm. Applies to tasks involving primitives, styled components, blocks, templates, and patterns.
+description: Build modern, composable, and accessible React UI components following the components.build specification. Use when creating, reviewing, or refactoring component libraries, design systems, or any reusable UI components. Triggers on tasks involving component APIs, composition patterns, accessibility, styling systems, or TypeScript props.
+license: MIT
+metadata:
+  author: components.build
+  version: "1.0.0"
 ---
 
 # Components.build Specification
 
-Standard for building modern, composable UI components. Co-authored by Hayden Bleasel and shadcn.
+Comprehensive guidelines for building modern, composable, and accessible UI components. Contains 16 rule categories covering everything from core principles to distribution, co-authored by Hayden Bleasel and shadcn.
 
-## Core Principles
+## When to Apply
 
-1. **Composability** - Build components that combine and nest to create complex UIs. Expose clear APIs via props/slots.
-2. **Accessible by Default** - Use semantic HTML, WAI-ARIA attributes, keyboard navigation, and focus management.
-3. **Customizable** - Avoid hard-coded styles. Provide CSS variables, class names, and style props.
-4. **Lightweight** - Minimize dependencies and unnecessary re-renders.
-5. **Transparent** - Components should not be black boxes. Source code should be inspectable and modifiable.
-6. **Well-documented** - Clear documentation with examples, props, and accessibility notes.
+Reference these guidelines when:
+- Creating new React components or component libraries
+- Designing component APIs and prop interfaces
+- Implementing accessibility features (keyboard, ARIA, focus management)
+- Building composable component architectures
+- Styling components with Tailwind CSS and CVA
+- Publishing components to registries or npm
 
-## Artifact Taxonomy
+## Rule Categories by Priority
 
-| Type | Description | Styled? | Reusable? |
-|------|-------------|---------|-----------|
-| **Primitive** | Behavior + a11y, no styling (Radix UI, React Aria) | No | Yes |
-| **Component** | Styled UI unit wrapping primitives | Yes | Yes |
-| **Pattern** | Documented solution for UI/UX problems | N/A | Reference only |
-| **Block** | Production-ready composition for specific use case | Yes | Copy-paste |
-| **Page** | Complete single-route view composed of blocks | Yes | No |
-| **Template** | Multi-page scaffold with routing and providers | Yes | Fork |
-| **Utility** | Non-visual helper (hooks, class utilities) | N/A | Yes |
-
-**Classification flow:**
-1. Single behavior/a11y, no styling? → Primitive
-2. Styled, reusable UI element? → Component
-3. Concrete product use case with opinionated composition? → Block
-4. Multi-page scaffold with routing? → Template
-5. Recurring solution documentation? → Pattern
-6. Non-visual logic? → Utility
-
-## Component Composition Pattern
-
-Break monolithic components into focused sub-components:
-
-```tsx
-// ❌ Monolithic - hard to customize
-<Accordion data={data} />
-
-// ✅ Composable - each layer customizable
-<Accordion.Root open={open} setOpen={setOpen}>
-  {data.map((item) => (
-    <Accordion.Item key={item.title}>
-      <Accordion.Trigger>{item.title}</Accordion.Trigger>
-      <Accordion.Content>{item.content}</Accordion.Content>
-    </Accordion.Item>
-  ))}
-</Accordion.Root>
-```
-
-**Naming conventions:**
-- `Root` - Main container, manages state/context
-- `Trigger` - Element that initiates action
-- `Content` - Main content area
-- `Header/Body/Footer` - Structural sections
-- `Title/Description` - Informational components
-
-## Type Patterns
-
-Always extend native HTML attributes:
-
-```tsx
-export type ButtonProps = React.ComponentProps<'button'> & {
-  variant?: 'primary' | 'secondary' | 'destructive';
-  size?: 'sm' | 'md' | 'lg';
-};
-
-export const Button = ({ variant = 'primary', size = 'md', ...props }: ButtonProps) => (
-  <button {...props} />
-);
-```
-
-**Rules:**
-- Each component wraps a single HTML/JSX element
-- Always spread props last: `<div className="default" {...props} />`
-- Export prop types as `ComponentNameProps`
-- Document custom props with JSDoc comments
-
-## Styling with `cn` Utility
-
-```tsx
-import { clsx, type ClassValue } from 'clsx';
-import { twMerge } from 'tailwind-merge';
-
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
-
-// Usage - order matters: base → variants → conditionals → overrides
-<div className={cn(
-  'base-styles',
-  variant && variantStyles,
-  isActive && 'active',
-  className
-)} />
-```
-
-## State Management
-
-Support both controlled and uncontrolled usage:
-
-```tsx
-import { useControllableState } from '@radix-ui/react-use-controllable-state';
-
-type StepperProps = {
-  value?: number;
-  defaultValue?: number;
-  onValueChange?: (value: number) => void;
-};
-
-const Stepper = ({ value: controlledValue, defaultValue, onValueChange }: StepperProps) => {
-  const [value, setValue] = useControllableState({
-    prop: controlledValue,
-    defaultProp: defaultValue,
-    onChange: onValueChange,
-  });
-  // ...
-};
-```
-
-## Data Attributes
-
-Use `data-state` for styling and `data-slot` for component identification:
-
-```tsx
-// data-state for visual states
-<div data-state={isOpen ? 'open' : 'closed'} />
-
-// Style with Tailwind
-<Dialog className="data-[state=open]:animate-in data-[state=closed]:animate-out" />
-
-// data-slot for parent targeting
-<button data-slot="submit-button" />
-
-// Parent can target children
-<form className="[&_[data-slot=submit-button]]:w-full" />
-```
+| Priority | Category | Focus | Prefix |
+|----------|----------|-------|--------|
+| 1 | Overview | Specification scope and goals | `overview` |
+| 2 | Principles | Core design philosophy | `principles` |
+| 3 | Definitions | Common terminology | `definitions` |
+| 4 | Composition | Breaking down complex components | `composition` |
+| 5 | Accessibility | Keyboard, screen readers, ARIA | `accessibility` |
+| 6 | State | Controlled/uncontrolled patterns | `state` |
+| 7 | Types | TypeScript props and interfaces | `types` |
+| 8 | Polymorphism | Element switching with `as` prop | `polymorphism` |
+| 9 | As-Child | Radix Slot composition pattern | `as-child` |
+| 10 | Data Attributes | `data-state` and `data-slot` | `data-attributes` |
+| 11 | Styling | Tailwind CSS, cn utility, CVA | `styling` |
+| 12 | Design Tokens | CSS variables and theming | `design-tokens` |
+| 13 | Documentation | Component documentation | `documentation` |
+| 14 | Registry | Component registries | `registry` |
+| 15 | NPM | Publishing to npm | `npm` |
+| 16 | Marketplaces | Component marketplaces | `marketplaces` |
 
 ## Quick Reference
 
-| Topic | When to use | Reference |
-|-------|-------------|-----------|
-| Composition patterns | Breaking down complex components | See `references/build-patterns.md` |
-| Accessibility | Keyboard nav, ARIA, focus management | See `references/build-patterns.md` |
-| Polymorphism (`as`/`asChild`) | Changing rendered element type | See `references/build-patterns.md` |
-| Design tokens | Setting up theming system | See `references/build-patterns.md` |
-| CVA variants | Complex variant styling | See `references/build-patterns.md` |
-| Registry publishing | Distributing via shadcn CLI | See `references/publish-patterns.md` |
-| NPM publishing | Traditional package distribution | See `references/publish-patterns.md` |
-| Documentation | Writing component docs | See `references/publish-patterns.md` |
+### 1. Overview
+- `overview` - Specification scope, goals, and philosophy
+
+### 2. Principles
+- `principles` - Composability, accessibility, customization, transparency
+
+### 3. Definitions
+- `definitions` - Common terminology (primitive, compound, headless, etc.)
+
+### 4. Composition
+- `composition-root` - Root component with Context for shared state
+- `composition-item` - Item wrapper components
+- `composition-trigger` - Interactive trigger components
+- `composition-content` - Content display components
+- `composition-export` - Namespace export pattern
+
+### 5. Accessibility
+- `accessibility-semantic-html` - Use appropriate HTML elements
+- `accessibility-keyboard` - Full keyboard navigation support
+- `accessibility-aria` - Proper ARIA roles, states, and properties
+- `accessibility-focus` - Focus management and restoration
+- `accessibility-live-regions` - Screen reader announcements
+- `accessibility-contrast` - Color contrast requirements
+
+### 6. State
+- `state-uncontrolled` - Internal state management
+- `state-controlled` - External state delegation
+- `state-controllable` - Support both patterns with useControllableState
+
+### 7. Types
+- `types-extend-html` - Extend native HTML attributes
+- `types-export` - Export prop types for consumers
+- `types-single-element` - One component wraps one element
+
+### 8. Polymorphism
+- `polymorphism-as-prop` - Change rendered element type
+- `polymorphism-typescript` - Type-safe polymorphic components
+- `polymorphism-defaults` - Semantic element defaults
+
+### 9. As-Child
+- `as-child-slot` - Radix Slot for prop merging
+- `as-child-composition` - Compose with child components
+
+### 10. Data Attributes
+- `data-attributes-state` - Use `data-state` for styling states
+- `data-attributes-slot` - Use `data-slot` for targeting sub-components
+
+### 11. Styling
+- `styling-cn-utility` - Combine clsx and tailwind-merge
+- `styling-order` - Base → Variants → Conditionals → User overrides
+- `styling-cva` - Class Variance Authority for variants
+- `styling-css-variables` - Dynamic values with CSS variables
+
+### 12. Design Tokens
+- `design-tokens-css-variables` - Define tokens as CSS variables
+- `design-tokens-theming` - Support light/dark modes and themes
+
+### 13. Documentation
+- `documentation-props` - Document all props with JSDoc
+- `documentation-examples` - Provide usage examples
+
+### 14. Registry
+- `registry-structure` - Registry file structure
+- `registry-schema` - Component metadata schema
+
+### 15. NPM
+- `npm-package-json` - Package configuration
+- `npm-exports` - Module exports
+
+### 16. Marketplaces
+- `marketplaces-distribution` - Component distribution strategies
+
+## How to Use
+
+Read individual rule files for detailed explanations and code examples:
+
+```
+rules/composition/SKILL.md
+rules/accessibility/SKILL.md
+rules/styling/SKILL.md
+```
+
+Each rule file contains:
+- Brief explanation of why it matters
+- Incorrect code example with explanation
+- Correct code example with explanation
+- Best practices and common pitfalls
+
+## Full Compiled Document
+
+For the complete guide with all rules expanded: `AGENTS.md`
+
+## Key Principles
+
+1. **Composition over Configuration** - Break components into composable sub-components
+2. **Accessibility by Default** - Not an afterthought, but a requirement
+3. **Single Element Wrapping** - Each component wraps one HTML element
+4. **Extend HTML Attributes** - Always extend native element props
+5. **Export Types** - Make prop types available to consumers
+6. **Support Both State Patterns** - Controlled and uncontrolled
+7. **Intelligent Class Merging** - Use `cn()` utility with tailwind-merge
+
+## Authors
+
+Co-authored by:
+- **Hayden Bleasel** ([@haydenbleasel](https://x.com/haydenbleasel))
+- **shadcn** ([@shadcn](https://x.com/shadcn))
+
+Adapted as an AI skill by:
+- **Jordan Gilliam** ([@nolansym](https://x.com/nolansym))
+
+Based on the [components.build](https://components.build) specification.

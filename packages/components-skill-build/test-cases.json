@@ -1,0 +1,378 @@
+[
+  {
+    "ruleId": "",
+    "ruleTitle": "Accessibility Guidelines",
+    "type": "bad",
+    "code": "<div onClick={handleClick} className=\"button\">Click me</div>",
+    "language": "tsx",
+    "description": "generic div"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Accessibility Guidelines",
+    "type": "good",
+    "code": "// Polite announcement\n<div role=\"status\" aria-live=\"polite\">{savedMessage && \"Saved\"}</div>\n\n// Assertive announcement\n<div role=\"alert\" aria-live=\"assertive\">{errorMessage}</div>",
+    "language": "tsx",
+    "description": "semantic element"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "asChild Pattern",
+    "type": "bad",
+    "code": "// Won't receive trigger behavior\nconst BadButton = ({ children }) => <button>{children}</button>;",
+    "language": "tsx",
+    "description": "Incorrect example for asChild Pattern"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "asChild Pattern",
+    "type": "good",
+    "code": "// Properly receives all props\nconst GoodButton = ({ children, ...props }) => (\n  <button {...props}>{children}</button>\n);",
+    "language": "tsx",
+    "description": "Correct example for asChild Pattern"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "asChild Pattern",
+    "type": "bad",
+    "code": "// Multiple children\n<Trigger asChild>\n  <button>One</button>\n  <button>Two</button>\n</Trigger>",
+    "language": "tsx",
+    "description": "Incorrect example for asChild Pattern"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "asChild Pattern",
+    "type": "good",
+    "code": "// Single child\n<Trigger asChild>\n  <button>Single Button</button>\n</Trigger>",
+    "language": "tsx",
+    "description": "Correct example for asChild Pattern"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "asChild Pattern",
+    "type": "good",
+    "code": "// Maintains button semantics\n<Dialog.Trigger asChild>\n  <button type=\"button\">Open</button>\n</Dialog.Trigger>",
+    "language": "tsx",
+    "description": "Correct example for asChild Pattern"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "asChild Pattern",
+    "type": "bad",
+    "code": "// Manual cloning misses edge cases\nif (asChild) {\n  return React.cloneElement(children, { ...props });\n}",
+    "language": "tsx",
+    "description": "Incorrect example for asChild Pattern"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "asChild Pattern",
+    "type": "good",
+    "code": "// Use Slot for proper merging\nif (asChild) {\n  return <Slot {...props}>{children}</Slot>;\n}",
+    "language": "tsx",
+    "description": "Correct example for asChild Pattern"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Component Composition",
+    "type": "bad",
+    "code": "<Accordion data={data} />",
+    "language": "tsx",
+    "description": "monolithic, hard to customize"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Component Composition",
+    "type": "good",
+    "code": "export const Accordion = { Root, Item, Trigger, Content };\n\n// Usage\n<Accordion.Root open={open} setOpen={setOpen}>\n  <Accordion.Item>\n    <Accordion.Trigger>Title</Accordion.Trigger>\n    <Accordion.Content>Content</Accordion.Content>\n  </Accordion.Item>\n</Accordion.Root>",
+    "language": "tsx",
+    "description": "composable, each layer customizable"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Data Attributes for Styling",
+    "type": "bad",
+    "code": "data-slot=\"input\"           // Too generic\ndata-slot=\"blueButton\"      // Includes styling\ndata-slot=\"div-wrapper\"     // Implementation detail",
+    "language": "tsx",
+    "description": "Incorrect example for Data Attributes for Styling"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Data Attributes for Styling",
+    "type": "good",
+    "code": "const Button = ({ variant = 'primary', size = 'md', loading, disabled, className, ...props }: ButtonProps) => {\n  return (\n    <button\n      data-slot=\"button\"\n      data-loading={loading}\n      data-disabled={disabled}\n      className={cn(buttonVariants({ variant, size }), className)}\n      disabled={disabled}\n      {...props}\n    />\n  );\n};\n\n// Usage\n<form className=\"[&_[data-slot=button]]:w-full\">\n  <Button loading={isLoading} className=\"data-[loading=true]:opacity-50\">Submit</Button>\n</form>",
+    "language": "tsx",
+    "description": "Correct example for Data Attributes for Styling"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Component Artifact Definitions",
+    "type": "bad",
+    "code": "// Wrong: This is styled, so it's a Component, not a Primitive\nfunction DialogPrimitive({ open, onOpenChange, children }) {\n  return (\n    <Dialog.Root open={open} onOpenChange={onOpenChange}>\n      <Dialog.Content className=\"rounded-lg border bg-white p-6 shadow-lg\">\n        {children}\n      </Dialog.Content>\n    </Dialog.Root>\n  );\n}",
+    "language": "tsx",
+    "description": "mislabeling a styled component as a primitive"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Component Artifact Definitions",
+    "type": "good",
+    "code": "// Primitive - behavior only, no styling\nfunction DialogPrimitive({ open, onOpenChange, children }) {\n  return (\n    <Dialog.Root open={open} onOpenChange={onOpenChange}>\n      {children}\n    </Dialog.Root>\n  );\n}\n\n// Component - styled wrapper around primitive\nfunction Dialog({ open, onOpenChange, children }) {\n  return (\n    <DialogPrimitive open={open} onOpenChange={onOpenChange}>\n      <Dialog.Content className={cn(\"rounded-lg border bg-white p-6 shadow-lg\")}>\n        {children}\n      </Dialog.Content>\n    </DialogPrimitive>\n  );\n}",
+    "language": "tsx",
+    "description": "proper classification based on styling presence"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Design Tokens",
+    "type": "good",
+    "code": "<button className=\"bg-primary text-primary-foreground hover:bg-primary/90\">\n  Click me\n</button>",
+    "language": "tsx",
+    "description": "semantic tokens"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Design Tokens",
+    "type": "bad",
+    "code": "// Before\n<div className=\"bg-white text-gray-900 border-gray-200\">Content</div>\n\n// After\n<div className=\"bg-background text-foreground border-border\">Content</div>",
+    "language": "tsx",
+    "description": "hardcoded colors"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Component Marketplaces",
+    "type": "bad",
+    "code": "{\n  \"name\": \"my-component\",\n  \"description\": \"A component\",\n  \"demos\": []\n}",
+    "language": "json",
+    "description": "Bad example for Component Marketplaces"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Component Marketplaces",
+    "type": "good",
+    "code": "{\n  \"name\": \"dialog-stack\",\n  \"description\": \"A composable dialog system with stack management, keyboard navigation, and focus trapping\",\n  \"demos\": [\n    {\n      \"title\": \"Basic Dialog\",\n      \"description\": \"Simple modal dialog with close button\",\n      \"code\": \"...\"\n    },\n    {\n      \"title\": \"Nested Dialogs\",\n      \"description\": \"Multiple dialogs in a stack\",\n      \"code\": \"...\"\n    },\n    {\n      \"title\": \"Form Dialog\",\n      \"description\": \"Dialog with form validation\",\n      \"code\": \"...\"\n    }\n  ],\n  \"documentation\": {\n    \"props\": \"...\",\n    \"examples\": \"...\",\n    \"accessibility\": \"...\"\n  }\n}",
+    "language": "json",
+    "description": "Good example for Component Marketplaces"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Publishing to NPM",
+    "type": "bad",
+    "code": "{\n  \"name\": \"@acme/ui-components\",\n  \"version\": \"1.0.0\",\n  \"main\": \"./src/index.ts\",\n  \"types\": \"./src/index.ts\",\n  \"dependencies\": {\n    \"react\": \"^18.0.0\",\n    \"react-dom\": \"^18.0.0\"\n  }\n}",
+    "language": "json",
+    "description": "Bad example for Publishing to NPM"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Publishing to NPM",
+    "type": "good",
+    "code": "{\n  \"name\": \"@acme/ui-components\",\n  \"version\": \"1.0.0\",\n  \"description\": \"Accessible React components\",\n  \"main\": \"./dist/index.js\",\n  \"module\": \"./dist/index.mjs\",\n  \"types\": \"./dist/index.d.ts\",\n  \"exports\": {\n    \".\": {\n      \"types\": \"./dist/index.d.ts\",\n      \"import\": \"./dist/index.mjs\",\n      \"require\": \"./dist/index.js\"\n    },\n    \"./styles.css\": \"./dist/styles.css\"\n  },\n  \"files\": [\"dist\"],\n  \"scripts\": {\n    \"build\": \"tsup\",\n    \"prepublishOnly\": \"npm run build\"\n  },\n  \"peerDependencies\": {\n    \"react\": \"^18.0.0\",\n    \"react-dom\": \"^18.0.0\"\n  },\n  \"dependencies\": {\n    \"clsx\": \"^2.0.0\",\n    \"tailwind-merge\": \"^2.0.0\"\n  }\n}",
+    "language": "json",
+    "description": "Correct example for Publishing to NPM"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Components.build Overview",
+    "type": "bad",
+    "code": "// Hard-coded styles, no accessibility, not composable\nfunction Button() {\n  return (\n    <button style={{ backgroundColor: '#007bff', color: 'white', padding: '10px' }}>\n      Click me\n    </button>\n  );\n}",
+    "language": "tsx",
+    "description": "Incorrect example for Components.build Overview"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Components.build Overview",
+    "type": "good",
+    "code": "// Composable, accessible, customizable\nimport { cn } from '@/lib/utils';\n\ninterface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {\n  variant?: 'default' | 'outline';\n}\n\nexport function Button({ \n  className, \n  variant = 'default', \n  children, \n  ...props \n}: ButtonProps) {\n  return (\n    <button\n      className={cn(\n        'inline-flex items-center justify-center rounded-md px-4 py-2',\n        'focus-visible:outline-none focus-visible:ring-2',\n        variant === 'default' && 'bg-primary text-primary-foreground',\n        variant === 'outline' && 'border border-input bg-background',\n        className\n      )}\n      {...props}\n    >\n      {children}\n    </button>\n  );\n}",
+    "language": "tsx",
+    "description": "Correct example for Components.build Overview"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Polymorphism Patterns",
+    "type": "bad",
+    "code": "function Component({ as: Element = 'div', ...props }) { }",
+    "language": "tsx",
+    "description": "too generic"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Polymorphism Patterns",
+    "type": "good",
+    "code": "function Article({ as: Element = 'article', ...props }) { }\nfunction Navigation({ as: Element = 'nav', ...props }) { }\nfunction Heading({ as: Element = 'h2', ...props }) { }",
+    "language": "tsx",
+    "description": "semantic defaults"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Core Component Principles",
+    "type": "bad",
+    "code": "<Accordion data={data} />",
+    "language": "tsx",
+    "description": "monolithic, hard to customize"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Core Component Principles",
+    "type": "good",
+    "code": "<Accordion.Root open={open} onOpenChange={setOpen}>\n  {items.map((item) => (\n    <Accordion.Item key={item.id}>\n      <Accordion.Trigger>{item.title}</Accordion.Trigger>\n      <Accordion.Content>{item.content}</Accordion.Content>\n    </Accordion.Item>\n  ))}\n</Accordion.Root>",
+    "language": "tsx",
+    "description": "composable, each layer customizable"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Core Component Principles",
+    "type": "bad",
+    "code": "<div onClick={handleClick} className=\"button\">Click me</div>",
+    "language": "tsx",
+    "description": "generic div with click handler"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Core Component Principles",
+    "type": "good",
+    "code": "<button onClick={handleClick}>Click me</button>",
+    "language": "tsx",
+    "description": "semantic button element"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Core Component Principles",
+    "type": "good",
+    "code": "export function Button({ className, ...props }: ButtonProps) {\n  return (\n    <button\n      className={cn('base-button-styles', className)}\n      {...props}\n    />\n  );\n}",
+    "language": "tsx",
+    "description": "design tokens and className override"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Core Component Principles",
+    "type": "bad",
+    "code": "import { entireDateLibrary } from 'heavy-date-lib';",
+    "language": "tsx",
+    "description": "heavy dependency for simple task"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Core Component Principles",
+    "type": "good",
+    "code": "const formatDate = (date: Date) => date.toLocaleDateString();",
+    "language": "tsx",
+    "description": "native APIs or lightweight alternatives"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Core Component Principles",
+    "type": "good",
+    "code": "export function Button({ children, onClick, ...props }: ButtonProps) {\n  return (\n    <button onClick={onClick} {...props}>\n      {children}\n    </button>\n  );\n}",
+    "language": "tsx",
+    "description": "clear, readable implementation"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Core Component Principles",
+    "type": "bad",
+    "code": "export const Button = compose(withHOC1, withHOC2, withHOC3)(BaseButton);",
+    "language": "tsx",
+    "description": "obfuscated or overly complex"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Core Component Principles",
+    "type": "good",
+    "code": "/**\n * Button component for primary actions.\n * \n * @example\n * <Button variant=\"primary\" onClick={handleClick}>Click me</Button>\n * \n * @remarks\n * - Supports keyboard navigation (Enter/Space)\n * - Accessible by default with proper ARIA attributes\n */\nexport function Button({ ... }: ButtonProps) { }",
+    "language": "tsx",
+    "description": "comprehensive JSDoc"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Component Registries",
+    "type": "bad",
+    "code": "// Traditional npm - compiled dependency\nimport { Button } from 'some-ui-library';",
+    "language": "typescript",
+    "description": "Bad example for Component Registries"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Component Registries",
+    "type": "good",
+    "code": "// Registry-based - source code in your project\nimport { Button } from '@/components/ui/button';",
+    "language": "typescript",
+    "description": "Good example for Component Registries"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Component Registries",
+    "type": "bad",
+    "code": "{\n  \"name\": \"announcement\",\n  \"type\": \"registry:component\",\n  \"description\": \"A compound badge component\"\n  // Missing dependencies, registryDependencies, files, and category\n}",
+    "language": "json",
+    "description": "Bad example for Component Registries"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Component Registries",
+    "type": "good",
+    "code": "{\n  \"name\": \"announcement\",\n  \"type\": \"registry:component\",\n  \"description\": \"A compound badge component\",\n  \"dependencies\": [\"class-variance-authority\", \"lucide-react\"],\n  \"registryDependencies\": [\"badge\"],\n  \"files\": [\n    {\n      \"type\": \"registry:component\",\n      \"path\": \"announcement.tsx\",\n      \"content\": \"...\"\n    }\n  ],\n  \"category\": \"ui\"\n}",
+    "language": "json",
+    "description": "Good example for Component Registries"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Component Styling with Tailwind CSS",
+    "type": "bad",
+    "code": "// Without tailwind-merge, conflicting classes both apply\nclassName=\"bg-red-500 bg-blue-500\" // Both classes apply, causing conflicts\nclassName=\"px-4 py-2 px-8\" // Both px-4 and px-8 apply",
+    "language": "tsx",
+    "description": "Incorrect example for Component Styling with Tailwind CSS"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Component Styling with Tailwind CSS",
+    "type": "good",
+    "code": "twMerge('bg-red-500', 'bg-blue-500'); // \"bg-blue-500\"\ntwMerge('px-4 py-2', 'px-8'); // \"py-2 px-8\"\ntwMerge('text-sm', 'text-lg'); // \"text-lg\"",
+    "language": "tsx",
+    "description": "Correct example for Component Styling with Tailwind CSS"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Component Styling with Tailwind CSS",
+    "type": "bad",
+    "code": "// Wrong order: user className comes before variants, preventing overrides\nclassName={cn(className, variant === 'primary' && 'bg-blue-500')}",
+    "language": "tsx",
+    "description": "Incorrect example for Component Styling with Tailwind CSS"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Component Styling with Tailwind CSS",
+    "type": "good",
+    "code": "import { cva, type VariantProps } from 'class-variance-authority';\n\nconst buttonVariants = cva(\n  \"inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium transition-all\",\n  {\n    variants: {\n      variant: {\n        default: \"bg-blue-500 text-white hover:bg-blue-600\",\n        destructive: \"bg-red-500 text-white hover:bg-red-600\",\n        outline: \"border border-gray-300 bg-transparent hover:bg-gray-50\",\n        ghost: \"hover:bg-gray-100\",\n      },\n      size: {\n        default: \"h-9 px-4 py-2\",\n        sm: \"h-8 px-3 text-sm\",\n        lg: \"h-10 px-6\",\n        icon: \"h-9 w-9\",\n      },\n    },\n    defaultVariants: {\n      variant: \"default\",\n      size: \"default\",\n    },\n  }\n);\n\ntype ButtonProps = React.ComponentProps<'button'> & VariantProps<typeof buttonVariants>;\n\nexport const Button = ({ className, variant, size, ...props }: ButtonProps) => {\n  return (\n    <button className={cn(buttonVariants({ variant, size }), className)} {...props} />\n  );\n};",
+    "language": "tsx",
+    "description": "Correct example for Component Styling with Tailwind CSS"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Component Styling with Tailwind CSS",
+    "type": "bad",
+    "code": "// Dynamic class generation (not detected by Tailwind)\n<div className={`bg-[${dynamicColor}]`} />",
+    "language": "tsx",
+    "description": "Incorrect example for Component Styling with Tailwind CSS"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Component Styling with Tailwind CSS",
+    "type": "good",
+    "code": "// CSS variables\n<div className=\"bg-[var(--color)]\" style={{ '--color': dynamicColor } as React.CSSProperties} />",
+    "language": "tsx",
+    "description": "Correct example for Component Styling with Tailwind CSS"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Component Types",
+    "type": "bad",
+    "code": "const Card = ({ title, description, footer, ...props }) => (\n  <div {...props}>\n    <div className=\"card-header\">\n      <h2>{title}</h2>\n      <p>{description}</p>\n    </div>\n    <div className=\"card-footer\">{footer}</div>\n  </div>\n);",
+    "language": "tsx",
+    "description": "hard to customize"
+  },
+  {
+    "ruleId": "",
+    "ruleTitle": "Component Types",
+    "type": "good",
+    "code": "export type CardRootProps = React.ComponentProps<'div'> & {\n  variant?: 'default' | 'outlined';\n};\n\nexport const CardRoot = ({ variant = 'default', ...props }: CardRootProps) => (\n  <div {...props} />\n);",
+    "language": "tsx",
+    "description": "composable, each layer customizable"
+  }
+]

@@ -1,0 +1,33 @@
+name: Components Build Skill CI
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'skills/components-build/**'
+      - 'packages/components-skill-build/**'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'skills/components-build/**'
+      - 'packages/components-skill-build/**'
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: packages/components-skill-build
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+          cache-dependency-path: packages/components-skill-build/pnpm-lock.yaml
+      - run: pnpm install
+      - run: pnpm validate
+      - run: pnpm build
