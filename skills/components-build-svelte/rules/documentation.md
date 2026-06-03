@@ -26,18 +26,16 @@ secondary actions, or destructive operations.
 
 Include live demos with code:
 
-```tsx
-import { Button } from "@/components/ui/button"
+```svelte
+<script lang="ts">
+  import { Button } from "$lib/components/ui/button"
+</script>
 
-export function ButtonDemo() {
-  return (
-    <div className="flex gap-2">
-      <Button variant="default">Default</Button>
-      <Button variant="destructive">Destructive</Button>
-      <Button variant="outline">Outline</Button>
-    </div>
-  )
-}
+<div class="flex gap-2">
+  <Button variant="default">Default</Button>
+  <Button variant="destructive">Destructive</Button>
+  <Button variant="outline">Outline</Button>
+</div>
 ```
 
 #### 3. Installation
@@ -70,17 +68,17 @@ List key capabilities:
 
 Show variants, states, and advanced usage:
 
-```tsx
-// Variants
+```svelte
+<!-- Variants -->
 <Button variant="default">Default</Button>
 <Button variant="secondary">Secondary</Button>
 <Button variant="destructive">Destructive</Button>
 
-// States
+<!-- States -->
 <Button disabled>Disabled</Button>
-<Button isLoading>Loading...</Button>
+<Button>Loading...</Button>
 
-// With icon
+<!-- With icon -->
 <Button><Icon /> Save</Button>
 ```
 
@@ -94,7 +92,7 @@ Document all props:
 | `variant` | `"default" \| "secondary" \| "destructive"` | `"default"` | Visual style |
 | `size` | `"sm" \| "md" \| "lg"` | `"md"` | Size |
 | `disabled` | `boolean` | `false` | Disabled state |
-| `onClick` | `(event: MouseEvent) => void` | - | Click handler |
+| `onclick` | `(event: MouseEvent) => void` | - | Click handler |
 ```
 
 #### 7. Accessibility
@@ -129,21 +127,21 @@ Track versions:
 
 **Use Real-World Examples:**
 
-```tsx
-// ✅ Real-world
-function UserProfile({ user }) {
-  return (
-    <Card>
-      <CardHeader><CardTitle>{user.name}</CardTitle></CardHeader>
-      <CardContent>
-        <Button onClick={() => editUser(user.id)}>Edit Profile</Button>
-      </CardContent>
-    </Card>
-  )
-}
+```svelte
+<!-- ✅ Real-world -->
+<script lang="ts">
+  let { user }: { user: { name: string; id: string } } = $props();
+</script>
 
-// ❌ Too abstract
-<Button onClick={handleClick}>Button</Button>
+<Card.Root>
+  <Card.Header><Card.Title>{user.name}</Card.Title></Card.Header>
+  <Card.Content>
+    <Button onclick={() => editUser(user.id)}>Edit Profile</Button>
+  </Card.Content>
+</Card.Root>
+
+<!-- ❌ Too abstract -->
+<Button onclick={handleClick}>Button</Button>
 ```
 
 **Include Troubleshooting:**
@@ -152,7 +150,7 @@ function UserProfile({ user }) {
 ## Troubleshooting
 
 **Button not responding:**
-- Ensure `onClick` handler is provided
+- Ensure `onclick` handler is provided
 - Check if `disabled` is set
 - Verify no parent is capturing events
 ```
@@ -168,15 +166,15 @@ function UserProfile({ user }) {
 
 **Make Examples Runnable:**
 
-```tsx
-// ✅ Complete, runnable
-import { Button } from "@/components/ui/button"
-import { useState } from "react"
+```svelte
+<!-- ✅ Complete, runnable -->
+<script lang="ts">
+  import { Button } from "$lib/components/ui/button"
 
-export function CounterButton() {
-  const [count, setCount] = useState(0)
-  return <Button onClick={() => setCount(count + 1)}>Count: {count}</Button>
-}
+  let count = $state(0);
+</script>
+
+<Button onclick={() => count++}>Count: {count}</Button>
 ```
 
 ### Documentation Checklist

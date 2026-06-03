@@ -15,20 +15,20 @@ Favor composition over inheritance. Build components that combine and nest to cr
 
 **Incorrect (monolithic, hard to customize):**
 
-```tsx
+```svelte
 <Accordion data={data} />
 ```
 
 **Correct (composable, each layer customizable):**
 
-```tsx
-<Accordion.Root open={open} onOpenChange={setOpen}>
-  {items.map((item) => (
-    <Accordion.Item key={item.id}>
+```svelte
+<Accordion.Root bind:open>
+  {#each items as item}
+    <Accordion.Item>
       <Accordion.Trigger>{item.title}</Accordion.Trigger>
       <Accordion.Content>{item.content}</Accordion.Content>
     </Accordion.Item>
-  ))}
+  {/each}
 </Accordion.Root>
 ```
 
@@ -38,14 +38,14 @@ Components must be usable by all users. Accessibility is not optional—it's a b
 
 **Incorrect (generic div with click handler):**
 
-```tsx
-<div onClick={handleClick} className="button">Click me</div>
+```svelte
+<div onclick={handleClick}>Click me</div>
 ```
 
 **Correct (semantic button element):**
 
-```tsx
-<button onClick={handleClick}>Click me</button>
+```svelte
+<button onclick={handleClick}>Click me</button>
 ```
 
 Best practices:
@@ -60,15 +60,16 @@ Components should be easy to restyle or adapt to different design requirements.
 
 **Correct (design tokens and className override):**
 
-```tsx
-export function Button({ className, ...props }: ButtonProps) {
-  return (
-    <button
-      className={cn('base-button-styles', className)}
-      {...props}
-    />
-  );
-}
+```svelte
+<script lang="ts">
+  import { cn } from '$lib/utils';
+
+  let { className, ...props }: { className?: string } = $props();
+</script>
+
+<button class={cn('base-button-styles', className)} {...props}>
+  {@render children?.()}
+</button>
 ```
 
 Best practices:
@@ -83,13 +84,13 @@ Components should be lean in terms of assets and dependencies.
 
 **Incorrect (heavy dependency for simple task):**
 
-```tsx
+```typescript
 import { entireDateLibrary } from 'heavy-date-lib';
 ```
 
 **Correct (native APIs or lightweight alternatives):**
 
-```tsx
+```typescript
 const formatDate = (date: Date) => date.toLocaleDateString();
 ```
 
@@ -105,20 +106,20 @@ Components should not be black boxes. Developers should be able to inspect and m
 
 **Correct (clear, readable implementation):**
 
-```tsx
-export function Button({ children, onClick, ...props }: ButtonProps) {
-  return (
-    <button onClick={onClick} {...props}>
-      {children}
-    </button>
-  );
-}
+```svelte
+<script lang="ts">
+  let { children, onclick, ...props } = $props();
+</script>
+
+<button {onclick} {...props}>
+  {@render children()}
+</button>
 ```
 
 **Incorrect (obfuscated or overly complex):**
 
-```tsx
-export const Button = compose(withHOC1, withHOC2, withHOC3)(BaseButton);
+```typescript
+const Button = compose(withHOC1, withHOC2, withHOC3)(BaseButton);
 ```
 
 ### 6. Well-documented and DX-Friendly
@@ -127,18 +128,17 @@ Components should come with clear documentation and examples.
 
 **Correct (comprehensive JSDoc):**
 
-```tsx
+```typescript
 /**
  * Button component for primary actions.
  * 
  * @example
- * <Button variant="primary" onClick={handleClick}>Click me</Button>
+ * <Button variant="primary" onclick={handleClick}>Click me</Button>
  * 
  * @remarks
  * - Supports keyboard navigation (Enter/Space)
  * - Accessible by default with proper ARIA attributes
  */
-export function Button({ ... }: ButtonProps) { }
 ```
 
 A well-designed component applies all six principles together: **Composes** with other components, **works for everyone** with proper accessibility, **adapts** to different designs via theming, **performs** efficiently, **can be inspected** and modified, and **is easy to learn** through documentation.

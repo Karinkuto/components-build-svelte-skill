@@ -1,23 +1,23 @@
 ---
-name: components-build
-description: Build modern, composable, and accessible React UI components following the components.build specification. Use when creating, reviewing, or refactoring component libraries, design systems, or any reusable UI components. Triggers on tasks involving component APIs, composition patterns, accessibility, styling systems, or TypeScript props.
+name: components-build-svelte
+description: Build modern, composable, and accessible Svelte 5 UI components following the components.build specification. Use when creating, reviewing, or refactoring component libraries, design systems, or any reusable Svelte components. Triggers on tasks involving component APIs, composition patterns, accessibility, styling systems, or TypeScript props with runes.
 license: MIT
 metadata:
-  author: components.build
-  version: "1.0.0"
+  author: Karinkuto
+  version: "1.0.0-svelte"
 ---
 
-# Components.build Specification
+# Components.build Specification (Svelte 5)
 
-Comprehensive guidelines for building modern, composable, and accessible UI components. Contains 16 rule categories covering everything from core principles to distribution, co-authored by Hayden Bleasel and shadcn.
+Comprehensive guidelines for building modern, composable, and accessible UI components in Svelte 5. Contains 16 rule categories covering everything from core principles to distribution, co-authored by Hayden Bleasel and shadcn, adapted for Svelte 5.
 
 ## When to Apply
 
 Reference these guidelines when:
-- Creating new React components or component libraries
-- Designing component APIs and prop interfaces
+- Creating new Svelte 5 components or component libraries
+- Designing component APIs and prop interfaces with runes
 - Implementing accessibility features (keyboard, ARIA, focus management)
-- Building composable component architectures
+- Building composable component architectures with snippets
 - Styling components with Tailwind CSS and CVA
 - Publishing components to registries or npm
 
@@ -28,12 +28,12 @@ Reference these guidelines when:
 | 1 | Overview | Specification scope and goals | `overview` |
 | 2 | Principles | Core design philosophy | `principles` |
 | 3 | Definitions | Common terminology | `definitions` |
-| 4 | Composition | Breaking down complex components | `composition` |
+| 4 | Composition | Snippets, createContext, compound components | `composition` |
 | 5 | Accessibility | Keyboard, screen readers, ARIA | `accessibility` |
-| 6 | State | Controlled/uncontrolled patterns | `state` |
-| 7 | Types | TypeScript props and interfaces | `types` |
-| 8 | Polymorphism | Element switching with `as` prop | `polymorphism` |
-| 9 | As-Child | Radix Slot composition pattern | `as-child` |
+| 6 | State | $state, $derived, $bindable patterns | `state` |
+| 7 | Types | TypeScript props with svelte/elements | `types` |
+| 8 | Polymorphism | Element switching with `<svelte:element>` | `polymorphism` |
+| 9 | As-Child | Snippet composition (not needed in Svelte 5) | `as-child` |
 | 10 | Data Attributes | `data-state` and `data-slot` | `data-attributes` |
 | 11 | Styling | Tailwind CSS, cn utility, CVA | `styling` |
 | 12 | Design Tokens | CSS variables and theming | `design-tokens` |
@@ -54,11 +54,11 @@ Reference these guidelines when:
 - `definitions` - Common terminology (primitive, compound, headless, etc.)
 
 ### 4. Composition
-- `composition-root` - Root component with Context for shared state
+- `composition-root` - Root component with createContext for shared state
 - `composition-item` - Item wrapper components
 - `composition-trigger` - Interactive trigger components
 - `composition-content` - Content display components
-- `composition-export` - Namespace export pattern
+- `composition-export` - Namespace export pattern with Svelte modules
 
 ### 5. Accessibility
 - `accessibility-semantic-html` - Use appropriate HTML elements
@@ -69,9 +69,9 @@ Reference these guidelines when:
 - `accessibility-contrast` - Color contrast requirements
 
 ### 6. State
-- `state-uncontrolled` - Internal state management
-- `state-controlled` - External state delegation
-- `state-controllable` - Support both patterns with useControllableState
+- `state-uncontrolled` - Internal state with $state
+- `state-controlled` - External state with $props
+- `state-controllable` - Both patterns with $bindable
 
 ### 7. Types
 - `types-extend-html` - Extend native HTML attributes
@@ -79,13 +79,12 @@ Reference these guidelines when:
 - `types-single-element` - One component wraps one element
 
 ### 8. Polymorphism
-- `polymorphism-as-prop` - Change rendered element type
+- `polymorphism-element` - Change rendered element with `<svelte:element>`
 - `polymorphism-typescript` - Type-safe polymorphic components
 - `polymorphism-defaults` - Semantic element defaults
 
 ### 9. As-Child
-- `as-child-slot` - Radix Slot for prop merging
-- `as-child-composition` - Compose with child components
+- Not applicable in Svelte 5 — snippets + `<svelte:element>` replace the pattern
 
 ### 10. Data Attributes
 - `data-attributes-state` - Use `data-state` for styling states
@@ -121,9 +120,9 @@ Reference these guidelines when:
 Read individual rule files for detailed explanations and code examples:
 
 ```
-rules/composition/SKILL.md
-rules/accessibility/SKILL.md
-rules/styling/SKILL.md
+rules/composition.md
+rules/accessibility.md
+rules/styling.md
 ```
 
 Each rule file contains:
@@ -136,15 +135,16 @@ Each rule file contains:
 
 For the complete guide with all rules expanded: `AGENTS.md`
 
-## Key Principles
+## Key Principles (Svelte 5)
 
-1. **Composition over Configuration** - Break components into composable sub-components
+1. **Composition over Configuration** - Break components into composable sub-components with snippets
 2. **Accessibility by Default** - Not an afterthought, but a requirement
 3. **Single Element Wrapping** - Each component wraps one HTML element
-4. **Extend HTML Attributes** - Always extend native element props
+4. **Extend HTML Attributes** - Always extend native element props using `svelte/elements`
 5. **Export Types** - Make prop types available to consumers
-6. **Support Both State Patterns** - Controlled and uncontrolled
+6. **Support Both State Patterns** - Controlled and uncontrolled with `$bindable`
 7. **Intelligent Class Merging** - Use `cn()` utility with tailwind-merge
+8. **Snippets over Children** - Use `{#snippet}` and `{@render}` instead of children prop
 
 ## Authors
 
@@ -154,5 +154,8 @@ Co-authored by:
 
 Adapted as an AI skill by:
 - **Jordan Gilliam** ([@nolansym](https://x.com/nolansym))
+
+Svelte 5 adaptation by:
+- **Karinkuto**
 
 Based on the [components.build](https://components.build) specification.

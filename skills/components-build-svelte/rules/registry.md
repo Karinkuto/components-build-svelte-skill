@@ -41,12 +41,12 @@ import { Button } from '@/components/ui/button';
   "name": "announcement",
   "type": "registry:component",
   "description": "A compound badge component",
-  "dependencies": ["class-variance-authority", "lucide-react"],
+  "dependencies": ["class-variance-authority", "lucide-svelte"],
   "registryDependencies": ["badge"],
   "files": [
     {
       "type": "registry:component",
-      "path": "announcement.tsx",
+      "path": "announcement.svelte",
       "content": "..."
     }
   ],
@@ -104,13 +104,13 @@ npx shadcn@latest add https://your-project.vercel.app/metric-card.json
   "name": "metric-card",
   "type": "registry:component",
   "description": "Display metrics with icon and trend",
-  "dependencies": ["lucide-react"],
+  "dependencies": ["lucide-svelte"],
   "registryDependencies": ["card"],
   "files": [
     {
       "type": "registry:component",
-      "path": "metric-card.tsx",
-      "content": "import { Card } from '@/components/ui/card'\n\nexport function MetricCard({ title, value }) {\n  return <Card><h3>{title}</h3><p>{value}</p></Card>\n}"
+      "path": "metric-card.svelte",
+      "content": "<script>import { Card } from '@/components/ui/card'</script>"
     }
   ],
   "category": "ui"

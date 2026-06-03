@@ -27,19 +27,18 @@ Choose npm when:
   "main": "./src/index.ts",
   "types": "./src/index.ts",
   "dependencies": {
-    "react": "^18.0.0",
-    "react-dom": "^18.0.0"
+    "svelte": "^5.0.0"
   }
 }
 ```
-Missing `exports` field, pointing to source files instead of built dist, and including React in dependencies instead of peerDependencies.
+Missing `exports` field, pointing to source files instead of built dist, and including Svelte in dependencies instead of peerDependencies.
 
 **Correct:**
 ```json
 {
   "name": "@acme/ui-components",
   "version": "1.0.0",
-  "description": "Accessible React components",
+  "description": "Accessible Svelte components",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
@@ -53,12 +52,11 @@ Missing `exports` field, pointing to source files instead of built dist, and inc
   },
   "files": ["dist"],
   "scripts": {
-    "build": "tsup",
+    "build": "svelte-package",
     "prepublishOnly": "npm run build"
   },
   "peerDependencies": {
-    "react": "^18.0.0",
-    "react-dom": "^18.0.0"
+    "svelte": "^5.0.0"
   },
   "dependencies": {
     "clsx": "^2.0.0",
@@ -71,7 +69,7 @@ Missing `exports` field, pointing to source files instead of built dist, and inc
 - Use `exports` for modern module resolution
 - Include ESM (`module`) and CommonJS (`main`)
 - Specify `types` for TypeScript
-- Use `peerDependencies` for React
+- Use `peerDependencies` for Svelte
 - Limit published files with `files` array
 
 ### Tailwind Configuration
@@ -92,7 +90,7 @@ Missing `exports` field, pointing to source files instead of built dist, and inc
 ```json
 {
   "scripts": {
-    "build": "tsup src/index.ts --format cjs,esm --dts",
+    "build": "svelte-package src/index.ts --format cjs,esm --dts",
     "prepublishOnly": "npm run build"
   }
 }
@@ -126,10 +124,13 @@ Missing `exports` field, pointing to source files instead of built dist, and inc
 npm install @acme/ui-components
 ```
 
-```tsx
-import { Button } from '@acme/ui-components'
+```svelte
+<script lang="ts">
+  import { Button } from '@acme/ui-components';
+</script>
 
-// Pre-built, versioned code from node_modules
+<!-- Pre-built, versioned code from node_modules -->
+<Button>Click me</Button>
 ```
 
 ### Choosing Distribution

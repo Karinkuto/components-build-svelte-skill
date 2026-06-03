@@ -27,7 +27,7 @@ primitive, compound, headless, and styled components.
 
 **Impact:** HIGH  
 **Description:** Breaking down complex components into composable sub-components
-using Root, Trigger, Content, and other naming patterns.
+using snippets, createContext, and Root/Trigger/Content naming patterns.
 
 ## 5. Accessibility (accessibility)
 
@@ -39,25 +39,25 @@ reader support, ARIA attributes, and focus management.
 
 **Impact:** HIGH  
 **Description:** Controlled and uncontrolled state patterns using
-useControllableState for flexible component APIs.
+$state, $derived, and $bindable for flexible component APIs.
 
 ## 7. Types (types)
 
 **Impact:** HIGH  
 **Description:** TypeScript patterns for component props including extending HTML
-attributes, exporting types, and single element wrapping.
+attributes from svelte/elements, exporting types, and single element wrapping.
 
 ## 8. Polymorphism (polymorphism)
 
 **Impact:** MEDIUM  
-**Description:** Implementing the `as` prop pattern to change rendered HTML
-elements while preserving component functionality.
+**Description:** Implementing polymorphic components with <svelte:element> to change
+rendered elements while preserving component functionality.
 
 ## 9. As-Child (as-child)
 
 **Impact:** MEDIUM  
-**Description:** Radix UI Slot pattern for merging props and behaviors with
-custom child elements without wrapper elements.
+**Description:** Svelte 5 snippet-based composition — the asChild pattern is
+not needed because snippets and <svelte:element> solve the same problem.
 
 ## 10. Data Attributes (data-attributes)
 

@@ -12,7 +12,7 @@ The components.build specification is an open-source standard for building moder
 **What This Specification Is:**
 
 This spec is **not**:
-- A tutorial or course on React
+- A tutorial or course on Svelte 5
 - A promotion for any specific component library or registry
 - A replacement for framework documentation
 
@@ -27,11 +27,11 @@ This spec **is**:
 This specification is written for:
 - **Open-source maintainers** building and distributing component libraries
 - **Senior front-end engineers** designing component APIs and design systems
-- **Developers** familiar with JavaScript/TypeScript and React
+- **Developers** familiar with JavaScript/TypeScript and Svelte 5
 
 **Framework Scope:**
 
-While examples use React (with JSX/TSX) for concreteness, the fundamental concepts apply to other frameworks (Vue, Svelte, Angular). The philosophy is **framework-agnostic**.
+While examples use Svelte 5 (with runes) for concreteness, the fundamental concepts apply to other frameworks (React, Vue, Angular). The philosophy is **framework-agnostic**.
 
 **Core Goals:**
 
@@ -57,48 +57,38 @@ The following examples illustrate the difference between components that don't f
 
 **Incorrect:**
 
-```tsx
-// Hard-coded styles, no accessibility, not composable
-function Button() {
-  return (
-    <button style={{ backgroundColor: '#007bff', color: 'white', padding: '10px' }}>
-      Click me
-    </button>
-  );
-}
+```svelte
+<!-- Hard-coded styles, no accessibility, not composable -->
+<button style="background-color: #007bff; color: white; padding: 10px">
+  Click me
+</button>
 ```
 
 **Correct:**
 
-```tsx
-// Composable, accessible, customizable
-import { cn } from '@/lib/utils';
+```svelte
+<script lang="ts">
+  import { cn } from '$lib/utils';
 
-interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'default' | 'outline';
-}
+  let { className, variant = 'default', children, ...props }: {
+    className?: string;
+    variant?: 'default' | 'outline';
+    children?: import('svelte').Snippet;
+  } = $props();
+</script>
 
-export function Button({ 
-  className, 
-  variant = 'default', 
-  children, 
-  ...props 
-}: ButtonProps) {
-  return (
-    <button
-      className={cn(
-        'inline-flex items-center justify-center rounded-md px-4 py-2',
-        'focus-visible:outline-none focus-visible:ring-2',
-        variant === 'default' && 'bg-primary text-primary-foreground',
-        variant === 'outline' && 'border border-input bg-background',
-        className
-      )}
-      {...props}
-    >
-      {children}
-    </button>
-  );
-}
+<button
+  class={cn(
+    'inline-flex items-center justify-center rounded-md px-4 py-2',
+    'focus-visible:outline-none focus-visible:ring-2',
+    variant === 'default' && 'bg-primary text-primary-foreground',
+    variant === 'outline' && 'border border-input bg-background',
+    className
+  )}
+  {...props}
+>
+  {@render children?.()}
+</button>
 ```
 
 **Specification Authors:**
@@ -109,5 +99,8 @@ Co-authored by:
 
 Adapted as an AI skill by:
 - **Jordan Gilliam** ([@nolansym](https://x.com/nolansym))
+
+Svelte 5 adaptation by:
+- **Karinkuto**
 
 Reference: [https://components.build](https://components.build)

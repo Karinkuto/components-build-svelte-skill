@@ -17,23 +17,23 @@ Always start with the most appropriate HTML element:
 
 **Incorrect (generic div):**
 
-```tsx
-<div onClick={handleClick} className="button">Click me</div>
+```svelte
+<div onclick={handleClick}>Click me</div>
 ```
 
 **Correct (semantic element):**
 
-```tsx
-<button onClick={handleClick}>Click me</button>
+```svelte
+<button onclick={handleClick}>Click me</button>
 ```
 
 #### 2. Keyboard Navigation
 
 Every interactive element must be keyboard accessible:
 
-```tsx
-function Menu() {
-  const handleKeyDown = (e: React.KeyboardEvent) => {
+```svelte
+<script lang="ts">
+  function handleKeydown(e: KeyboardEvent) {
     switch(e.key) {
       case 'ArrowDown': focusNextItem(); break;
       case 'ArrowUp': focusPreviousItem(); break;
@@ -41,16 +41,19 @@ function Menu() {
       case 'End': focusLastItem(); break;
       case 'Escape': closeMenu(); break;
     }
-  };
-  return <div role="menu" onKeyDown={handleKeyDown}>{/* items */}</div>;
-}
+  }
+</script>
+
+<div role="menu" onkeydown={handleKeydown}>
+  <!-- items -->
+</div>
 ```
 
 #### 3. Screen Reader Support
 
 Use ARIA attributes when necessary:
 
-```tsx
+```svelte
 <nav aria-label="Main navigation">
   <ul>
     <li><a href="/" aria-current="page">Home</a></li>
@@ -58,7 +61,9 @@ Use ARIA attributes when necessary:
 </nav>
 
 <div aria-live="polite" aria-atomic="true">
-  {isLoading && <span>Loading results...</span>}
+  {#if isLoading}
+    <span>Loading results...</span>
+  {/if}
 </div>
 ```
 
@@ -89,37 +94,71 @@ button:focus-visible {
 
 #### Modal/Dialog
 
-```tsx
-function Modal({ isOpen, onClose, children }) {
-  return isOpen ? (
-    <div role="dialog" aria-modal="true" aria-labelledby="modal-title">
-      <button onClick={onClose} aria-label="Close dialog">×</button>
-      {children}
-    </div>
-  ) : null;
-}
+```svelte
+<script lang="ts">
+  let { isOpen, onClose, children }: {
+    isOpen: boolean;
+    onClose: () => void;
+    children: import('svelte').Snippet;
+  } = $props();
+</script>
+
+{#if isOpen}
+  <div role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <button onclick={onClose} aria-label="Close dialog">&times;</button>
+    {@render children()}
+  </div>
+{/if}
 ```
 
 #### Dropdown Menu
 
-```tsx
+```svelte
 <button aria-haspopup="true" aria-expanded={isOpen} aria-controls="dropdown-menu">
   Menu
 </button>
-{isOpen && (
+{#if isOpen}
   <ul id="dropdown-menu" role="menu">
-    <li role="menuitem" tabIndex={-1}>Item 1</li>
+    <li role="menuitem" tabindex="-1">Item 1</li>
   </ul>
-)}
+{/if}
 ```
 
 #### Tabs
 
-```tsx
+```svelte
 <div role="tablist" aria-label="Tabs">
   <button role="tab" aria-selected={activeTab === 0} aria-controls="panel-0">Tab 1</button>
 </div>
-<div id="panel-0" role="tabpanel" aria-labelledby="tab-0">{/* content */}</div>
+<div id="panel-0" role="tabpanel" aria-labelledby="tab-0">
+  <!-- content -->
+</div>
+```
+
+### $props.id() for Unique IDs
+
+Svelte 5 provides `$props.id()` to generate stable unique IDs for ARIA associations:
+
+```svelte
+<script lang="ts">
+  let { label, describedBy, children }: {
+    label: string;
+    describedBy?: string;
+    children: import('svelte').Snippet;
+  } = $props();
+
+  const id = $props.id();
+  const labelId = `${id}-label`;
+  const descId = `${id}-desc`;
+</script>
+
+<div aria-labelledby={labelId} aria-describedby={describedBy ? descId : undefined}>
+  <span id={labelId}>{label}</span>
+  {#if describedBy}
+    <span id={descId} hidden>{describedBy}</span>
+  {/if}
+  {@render children()}
+</div>
 ```
 
 ### Focus Management
@@ -134,46 +173,50 @@ function Modal({ isOpen, onClose, children }) {
 
 ### Live Regions
 
-```tsx
-// Polite announcement
-<div role="status" aria-live="polite">{savedMessage && "Saved"}</div>
+```svelte
+<!-- Polite announcement -->
+<div role="status" aria-live="polite">
+  {#if savedMessage}Saved{/if}
+</div>
 
-// Assertive announcement
-<div role="alert" aria-live="assertive">{errorMessage}</div>
+<!-- Assertive announcement -->
+<div role="alert" aria-live="assertive">
+  {#if errorMessage}{errorMessage}{/if}
+</div>
 ```
 
 ### Common Pitfalls
 
 **Placeholder as labels:**
 
-```tsx
-// ❌ Placeholder disappears
+```svelte
+<!-- ❌ Placeholder disappears -->
 <input placeholder="Email address" />
 
-// ✅ Persistent label
+<!-- ✅ Persistent label -->
 <label>Email address <input type="email" /></label>
 ```
 
 **Empty buttons:**
 
-```tsx
-// ❌ No accessible name
+```svelte
+<!-- ❌ No accessible name -->
 <button><TrashIcon /></button>
 
-// ✅ Screen reader text
+<!-- ✅ Screen reader text -->
 <button aria-label="Delete item"><TrashIcon aria-hidden="true" /></button>
 ```
 
 **Disabled elements:**
 
-```tsx
-// ✅ Use aria-disabled and explain
+```svelte
+<!-- ✅ Use aria-disabled and explain -->
 <button
   aria-disabled={!isValid}
   aria-describedby="submit-help"
-  onClick={isValid ? handleSubmit : undefined}
+  onclick={isValid ? handleSubmit : undefined}
 >Submit</button>
-<span id="submit-help">{!isValid && 'Fill required fields'}</span>
+<span id="submit-help">{#if !isValid}Fill required fields{/if}</span>
 ```
 
 ### Mobile Accessibility
@@ -188,5 +231,5 @@ function Modal({ isOpen, onClose, children }) {
 
 ```html
 <!-- Allow zooming -->
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 ```
