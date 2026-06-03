@@ -6,15 +6,15 @@ Skills follow the [Agent Skills](https://agentskills.io/) format.
 
 ## Available Skills
 
-### components-build
+### components-build-svelte
 
-Build modern, composable, and accessible React UI components following the [components.build](https://components.build) specification. Contains 16 rule categories covering everything from core principles to distribution, co-authored by Hayden Bleasel and shadcn.
+Build modern, composable, and accessible **Svelte 5** UI components following the [components.build](https://components.build) specification. Contains 16 rule categories covering everything from core principles to distribution, co-authored by Hayden Bleasel and shadcn, adapted for Svelte 5 runes.
 
 **Use when:**
-- Creating new React components or component libraries
-- Designing component APIs and prop interfaces
+- Creating new Svelte 5 components or component libraries
+- Designing component APIs and prop interfaces with runes
 - Implementing accessibility features
-- Building composable component architectures
+- Building composable component architectures with snippets
 - Styling components with Tailwind CSS and CVA
 - Publishing components to registries or npm
 
@@ -22,12 +22,12 @@ Build modern, composable, and accessible React UI components following the [comp
 - Overview (specification scope and goals)
 - Principles (composition, accessibility, customization, transparency)
 - Definitions (primitive, compound, headless terminology)
-- Composition (root, item, trigger, content patterns)
+- Composition (root, item, trigger, content with snippets)
 - Accessibility (semantic HTML, keyboard, ARIA, focus management)
-- State (controlled/uncontrolled patterns)
-- Types (extending HTML attributes, exporting prop types)
-- Polymorphism (element switching with `as` prop)
-- As-Child (Radix Slot composition pattern)
+- State (controlled/uncontrolled with $state and $bindable)
+- Types (extending HTML attributes from svelte/elements)
+- Polymorphism (element switching with `<svelte:element>`)
+- As-Child (not needed in Svelte 5 — snippets avoid the wrapper problem)
 - Data Attributes (`data-state` and `data-slot`)
 - Styling (Tailwind CSS, cn utility, CVA variants)
 - Design Tokens (CSS variables and theming)
@@ -44,13 +44,20 @@ Build modern, composable, and accessible React UI components following the [comp
 5. Export Types
 6. Support Both State Patterns
 7. Intelligent Class Merging
+8. Snippets over Children
 
 ## Installation
+
+### skills.sh
+
+```bash
+npx skills add Karinkuto/components-build-svelte-skill --skill components-build-svelte
+```
 
 ### Claude Code
 
 ```bash
-cp -r skills/components-build ~/.claude/skills/
+cp -r skills/components-build-svelte ~/.claude/skills/
 ```
 
 ### claude.ai
@@ -63,13 +70,13 @@ Skills are automatically available once installed. The agent will use them when 
 
 **Examples:**
 ```
-Build me a composable Tabs component
+Build me a composable Tabs component in Svelte 5
 ```
 ```
 Review this component for accessibility issues
 ```
 ```
-Help me implement controlled/uncontrolled state pattern
+Help me implement controlled/uncontrolled state with $bindable
 ```
 ```
 Set up component variants with CVA
@@ -81,6 +88,7 @@ Each skill contains:
 - `SKILL.md` - Instructions for the agent
 - `AGENTS.md` - Full compiled document with all rules expanded
 - `rules/` - Individual rule categories
+- `rules/svelte-migration.md` - React to Svelte 5 migration reference
 
 ## Authors
 
@@ -91,7 +99,9 @@ Co-authored by:
 Adapted as an AI skill by:
 - **Jordan Gilliam** ([@nolansym](https://x.com/nolansym))
 
+Svelte 5 adaptation by:
+- **Karinkuto**
+
 ## License
 
 MIT
-# components-build-skill
