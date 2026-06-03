@@ -1,6 +1,6 @@
 {
 	"version": "1.0.0-svelte",
-	"organization": "Karinkuto",
+	"organization": "Amen Segni (@karinkuto)",
 	"date": "June 2026",
 	"abstract": "Comprehensive guidelines for building modern, composable, and accessible UI components in Svelte 5. This specification provides patterns and best practices for creating Svelte components using runes, snippets, and modern Svelte idioms.",
 	"references": [

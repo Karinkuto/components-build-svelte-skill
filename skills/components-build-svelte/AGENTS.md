@@ -1,7 +1,7 @@
 # Components.build Specification (Svelte 5)
 
 **Version 1.0.0-svelte**
-Karinkuto
+Amen Segni (@karinkuto)
 June 2026
 
 > **Note:**

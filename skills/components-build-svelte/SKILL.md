@@ -156,6 +156,6 @@ Adapted as an AI skill by:
 - **Jordan Gilliam** ([@nolansym](https://x.com/nolansym))
 
 Svelte 5 adaptation by:
-- **Karinkuto**
+- **Amen Segni** ([@karinkuto](https://x.com/karinkuto))
 
 Based on the [components.build](https://components.build) specification.
