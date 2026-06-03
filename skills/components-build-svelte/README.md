@@ -64,28 +64,6 @@ components-build-svelte/
 
 ## Installation
 
-### Claude Code
-
-```bash
-cp -r skills/components-build-svelte ~/.claude/skills/
-```
-
-### Cursor
-
-```bash
-cp -r skills/components-build-svelte ~/.cursor/skills/
-```
-
-### skills.sh
-
-```bash
-npx skills add Karinkuto/components-build-svelte-skill --skill components-build-svelte
-```
-
-### claude.ai
-
-Add `SKILL.md` to your project knowledge, or paste its contents into a conversation.
-
 ## Creating a New Rule
 
 1. Copy `rules/_template.md` to `rules/{category}.md`

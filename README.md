@@ -54,16 +54,6 @@ Build modern, composable, and accessible **Svelte 5** UI components following th
 npx skills add Karinkuto/components-build-svelte-skill --skill components-build-svelte
 ```
 
-### Claude Code
-
-```bash
-cp -r skills/components-build-svelte ~/.claude/skills/
-```
-
-### claude.ai
-
-Add the skill to project knowledge or paste SKILL.md contents into the conversation.
-
 ## Usage
 
 Skills are automatically available once installed. The agent will use them when relevant tasks are detected.
